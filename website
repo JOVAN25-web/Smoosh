@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMOOSH – Find ur dream smoothies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2b1b4a; --card:#ffffffd9;
+  --pink:#ff4fa3; --yellow:#ffd93d; --green:#2ee59d; --blue:#3ab4ff; --purple:#9b5cff; --orange:#ff8a3d;
+  --r:26px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Fredoka',system-ui,sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
+  background:linear-gradient(135deg,#ffe0f0,#fff3c4 35%,#d6fff0 65%,#d9ecff);background-attachment:fixed}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+
+/* background blobs */
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:drift 18s ease-in-out infinite alternate}
+.b1{width:420px;height:420px;background:var(--pink);top:-120px;left:-100px}
+.b2{width:380px;height:380px;background:var(--yellow);top:30%;right:-120px;animation-delay:-5s}
+.b3{width:420px;height:420px;background:var(--green);bottom:-160px;left:20%;animation-delay:-9s}
+.b4{width:320px;height:320px;background:var(--blue);bottom:10%;right:15%;animation-delay:-3s}
+@keyframes drift{to{transform:translate(60px,-50px) scale(1.15)}}
+
+.view{min-height:100vh;animation:viewIn .5s ease both}
+.hidden{display:none!important}
+@keyframes viewIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+
+/* ---------- HOME ---------- */
+#home{display:grid;place-items:center;text-align:center;padding:24px 16px 90px;position:relative}
+.logo{font-family:'Baloo 2';font-weight:800;font-size:clamp(3.2rem,11vw,7rem);line-height:1;letter-spacing:2px;
+  background:linear-gradient(90deg,var(--pink),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple),var(--pink));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite;
+  filter:drop-shadow(0 6px 0 #fff)}
+@keyframes flow{to{background-position:300% 0}}
+.slogan{font-size:clamp(1.2rem,4vw,2rem);font-weight:600;margin-top:6px}
+.slogan b{color:var(--pink)}
+.stage{perspective:900px;width:min(92vw,560px);height:clamp(340px,52vh,470px);margin-top:10px;position:relative;touch-action:none}
+.scene{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .15s ease-out}
+.sway{position:absolute;inset:0;transform-style:preserve-3d;animation:sway 7s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotateY(-10deg)}50%{transform:rotateY(10deg)}}
+.hero-cup{position:absolute;left:50%;top:50%;width:min(46%,230px);transform:translate(-50%,-50%) translateZ(10px);filter:drop-shadow(0 24px 24px #7a2bd055);
+  animation:pop .9s cubic-bezier(.3,1.5,.5,1) both,float 4.5s ease-in-out .9s infinite}
+.fx{position:absolute;left:50%;top:50%;font-size:clamp(2.6rem,9vw,4.2rem);cursor:pointer;user-select:none;
+  transform:translate3d(var(--x),var(--y),var(--z)) translate(-50%,-50%);
+  animation:pop .8s cubic-bezier(.3,1.7,.5,1) var(--d) both,float var(--t,4s) ease-in-out calc(var(--d) + .8s) infinite;filter:drop-shadow(0 12px 8px #0002)}
+.fx.boing{animation:boing .6s ease both}
+@keyframes pop{from{scale:0;opacity:0}to{scale:1;opacity:1}}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -16px}}
+@keyframes boing{0%{scale:1;rotate:0}30%{scale:1.5;rotate:-20deg}60%{scale:.85;rotate:15deg}100%{scale:1;rotate:0}}
+.ice{position:absolute;left:50%;top:50%;width:0;height:0;transform:translate3d(var(--x),var(--y),var(--z));transform-style:preserve-3d}
+.cube{--s:54px;position:absolute;left:calc(var(--s)/-2);top:calc(var(--s)/-2);width:var(--s);height:var(--s);transform-style:preserve-3d;
+  animation:spin var(--t,9s) linear infinite,pop .8s cubic-bezier(.3,1.7,.5,1) var(--d) both}
+.cube i{position:absolute;inset:0;border:2px solid #fff;border-radius:10px;background:linear-gradient(135deg,#e6faff99,#9ee3ff77);box-shadow:inset 0 0 14px #fff}
+.cube i:nth-child(1){transform:translateZ(calc(var(--s)/2))}
+.cube i:nth-child(2){transform:rotateY(180deg) translateZ(calc(var(--s)/2))}
+.cube i:nth-child(3){transform:rotateY(90deg) translateZ(calc(var(--s)/2))}
+.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(calc(var(--s)/2))}
+.cube i:nth-child(5){transform:rotateX(90deg) translateZ(calc(var(--s)/2))}
+.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(calc(var(--s)/2))}
+@keyframes spin{to{transform:rotate3d(1,1,0,360deg)}}
+.hint{font-size:.95rem;opacity:.7;margin-top:4px}
+.next{position:fixed;right:22px;bottom:20px;font-weight:700;font-size:1.3rem;padding:12px 26px;border-radius:999px;color:#fff;
+  background:linear-gradient(90deg,var(--pink),var(--orange));box-shadow:0 8px 0 #c2307a,0 14px 24px #c2307a55;transition:transform .15s,box-shadow .15s;z-index:5}
+.next span{display:inline-block;animation:nudge 1s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(7px)}}
+.next:hover{transform:translateY(-3px)}
+.next:active{transform:translateY(5px);box-shadow:0 3px 0 #c2307a}
+
+/* ---------- EXPLORE ---------- */
+#explore{padding:18px 16px 60px;max-width:1180px;margin:0 auto}
+.topbar{display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:'Baloo 2';font-weight:800;font-size:1.7rem;background:linear-gradient(90deg,var(--pink),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.pill{padding:8px 16px;border-radius:999px;background:#fff;font-weight:600;box-shadow:0 4px 0 #d9c9ff;transition:transform .15s}
+.pill:hover{transform:translateY(-2px)}
+.pill:active{transform:translateY(3px);box-shadow:0 1px 0 #d9c9ff}
+.headline{text-align:center;margin:18px 0 14px}
+.headline h2{font-family:'Baloo 2';font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.1}
+.headline p{opacity:.75}
+.search{display:flex;align-items:center;gap:10px;max-width:640px;margin:0 auto;background:#fff;border-radius:999px;padding:8px 10px 8px 20px;
+  box-shadow:0 8px 0 #ffb3d9,0 16px 30px #ff4fa333;border:3px solid var(--pink);transition:transform .2s}
+.search:focus-within{transform:scale(1.02)}
+.search input{flex:1;border:0;outline:0;font:inherit;font-size:1.1rem;background:transparent;color:var(--ink);min-width:0}
+.search button{width:40px;height:40px;border-radius:50%;background:var(--pink);color:#fff;font-size:1.1rem}
+.benefits{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 4px}
+.benefits span{background:#ffffffb0;padding:6px 14px;border-radius:999px;font-size:.88rem;font-weight:500}
+.chips{display:flex;gap:10px;overflow-x:auto;padding:14px 4px 10px;scrollbar-width:thin;justify-content:safe center}
+.chip{flex:none;padding:10px 18px;border-radius:999px;background:#fff;font-weight:600;border:3px solid transparent;transition:transform .2s,background .2s;white-space:nowrap}
+.chip:hover{transform:translateY(-3px) rotate(-1.5deg)}
+.chip.on{color:#fff;background:linear-gradient(120deg,var(--c1),var(--c2));box-shadow:0 5px 0 #0002;border-color:#fff}
+.count{text-align:center;font-weight:500;opacity:.8;margin:4px 0 14px}
+.blurb{text-align:center;max-width:640px;margin:0 auto 14px;font-size:.95rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.card{position:relative;text-align:left;border-radius:var(--r);padding:16px;color:#fff;overflow:hidden;
+  background:linear-gradient(150deg,var(--c1),var(--c2));box-shadow:0 8px 0 #0002,0 16px 28px #0002;
+  animation:rise .5s cubic-bezier(.3,1.4,.5,1) both;animation-delay:calc(min(var(--i),18) * 35ms);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.card::after{content:"";position:absolute;width:140px;height:140px;border-radius:50%;background:#ffffff30;right:-40px;top:-40px}
+.card:hover{transform:translateY(-8px) rotate(-1.2deg) scale(1.03)}
+.card:active{transform:scale(.97)}
+@keyframes rise{from{opacity:0;transform:translateY(26px) scale(.9)}to{opacity:1;transform:none}}
+.card .cup{width:70px;height:auto;display:block;margin:0 auto 6px;filter:drop-shadow(0 8px 6px #0003);transition:transform .3s}
+.card:hover .cup{transform:rotate(8deg) translateY(-4px)}
+.card h3{font-family:'Baloo 2';font-size:1.2rem;line-height:1.15;text-shadow:0 2px 0 #0003}
+.card p{font-size:.84rem;margin-top:5px;opacity:.95}
+.card .tag{display:inline-block;margin-top:8px;background:#fff;color:var(--ink);font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:999px}
+.empty{text-align:center;padding:50px 10px;font-size:1.2rem}
+.empty b{display:block;font-size:3rem}
+footer{text-align:center;margin-top:40px;font-size:.9rem;opacity:.7}
+
+/* ---------- DETAIL ---------- */
+#detail{padding:18px 16px 60px;max-width:1000px;margin:0 auto}
+.dwrap{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:26px;margin-top:20px;align-items:start}
+.dcup{border-radius:34px;padding:26px 14px 18px;background:linear-gradient(150deg,var(--c1),var(--c2));box-shadow:0 10px 0 #0002,0 20px 36px #0003;text-align:center;position:sticky;top:16px;perspective:700px}
+.dcup .cup{width:min(70%,200px);animation:float 4s ease-in-out infinite;filter:drop-shadow(0 18px 14px #0004);transition:transform .15s;transform:rotateX(var(--rx,0)) rotateY(var(--ry,0))}
+.dcup .cat{display:inline-block;background:#fff;padding:4px 14px;border-radius:999px;font-weight:600;font-size:.85rem;margin-top:10px}
+.panel{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:0 8px 24px #7a2bd01f;backdrop-filter:blur(8px)}
+.panel + .panel{margin-top:18px}
+.panel h1{font-family:'Baloo 2';font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.05}
+.panel h2{font-family:'Baloo 2';font-size:1.4rem;margin-bottom:10px}
+.tip{margin-top:8px;opacity:.8}
+.ings{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.ings li{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:16px;background:#fff;cursor:pointer;user-select:none;border:2px solid #f0e6ff;transition:transform .2s,background .2s}
+.ings li:hover{transform:translateY(-2px)}
+.ings li .e{font-size:1.6rem}
+.ings li.done{background:#e7ffe9;border-color:var(--green);text-decoration:line-through;opacity:.7}
+.steps{list-style:none;counter-reset:s;display:grid;gap:10px}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:#fff;cursor:pointer;border:2px solid #f0e6ff;transition:transform .2s,background .2s}
+.steps li::before{content:counter(s);flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;background:linear-gradient(120deg,var(--c1),var(--c2))}
+.steps li:hover{transform:translateX(4px)}
+.steps li.done{background:#e7ffe9;border-color:var(--green);opacity:.7}
+.steps li.done::before{content:"✓"}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.prog{height:12px;border-radius:99px;background:#fff;overflow:hidden;margin-bottom:12px;border:2px solid #f0e6ff}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .4s}
+@media (max-width:720px){.dwrap{grid-template-columns:1fr}.dcup{position:relative;top:0}.grid{grid-template-columns:repeat(2,1fr);gap:12px}.card{padding:12px}.card h3{font-size:1.05rem}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="bg"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span></div>
+
+<!-- 1. BERANDA -->
+<section id="home" class="view">
+  <div>
+    <h1 class="logo">SMOOSH</h1>
+    <p class="slogan">"Find ur <b>dream</b> smoothies"</p>
+    <div class="stage" id="stage"><div class="scene" id="scene"><div class="sway" id="sway"></div></div></div>
+    <p class="hint">Gerakkan kursor atau sentuh buah-buahannya ✨</p>
+  </div>
+  <button class="next" id="nextBtn" aria-label="Lanjut ke halaman pencarian">next <span>→</span></button>
+</section>
+
+<!-- 2. SEARCH / EXPLORE -->
+<section id="explore" class="view hidden">
+  <div class="topbar"><button class="brand" id="toHome" aria-label="Ke beranda">SMOOSH</button><button class="pill" id="randomBtn">🎲 Acak</button></div>
+  <div class="headline"><h2>Cari smoothie impianmu 🥤</h2><p>Ketik nama menu atau bahan, misalnya “mangga” atau “jahe”.</p></div>
+  <label class="search"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="Cari resep smoothies..." autocomplete="off" aria-label="Cari resep"><button id="clearQ" aria-label="Hapus pencarian" title="Hapus">✕</button></label>
+  <div class="benefits"><span>🧠 Mengatasi kebingungan</span><span>🌿 Referensi hidup sehat</span><span>🥗 Mudah menyesuaikan diet</span></div>
+  <div class="chips" id="chips"></div>
+  <p class="blurb" id="blurb"></p>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+  <footer>SMOOSH · Kelompok 7 · Find ur dream smoothies 🍓</footer>
+</section>
+
+<!-- 3. DETAIL -->
+<section id="detail" class="view hidden"></section>
+
+<script>
+/* ================= DATA (25 resep per menu) ================= */
+const CATS=[
+{name:'Green & Detox',icon:'🥬',c1:'#00c853',c2:'#c6ff00',blurb:'Sayuran hijau segar, buah rendah gula, dan bahan detoksifikasi.',tip:'Blend sayuran hijau bersama cairan dulu supaya hasilnya halus tanpa serat kasar.',data:`
+Green Booster: Bayam, apel hijau, timun, jahe, air kelapa
+Tropical Green: Kangkung, nanas, mangga, air kelapa
+Avocado Cleanse: Alpukat, bayam, seledri, apel hijau, jus lemon
+Minty Green: Daun mint, bayam, timun, melon hijau, air kelapa
+Kiwi Detox: Kiwi, bayam, pisang, air jeruk nipis
+Celery Zing: Seledri, apel hijau, jahe, lemon, madu
+Kale Power: Daun kale, pisang, buah pir, susu almond
+Cucumber Fresh: Timun, daun mint, apel hijau, chia seeds
+Broccoli Green: Brokoli kukus, apel, pisang, yogurt
+Matcha Clean: Bubuk matcha, bayam, pisang, susu kedelai
+Spirulina Boost: Bubuk spirulina, pisang, nanas, air kelapa
+Green Piña: Bayam, nanas, santan encer, pisang
+Ginger Kale: Kale, jahe, apel merah, jus lemon
+Aloe Fresh: Gel lidah buaya, timun, melon, air lemon
+Parsley Glow: Peterseli, nanas, apel hijau, mentimun
+Wheatgrass Energizer: Bubuk wheatgrass, pisang, mangga, air
+Zucchini Cream: Zucchini, blueberry, pisang, susu almond
+Lime Green: Bayam, kiwi, mangga, air jeruk nipis
+Sweet Kale: Kale, kurma, pisang, susu oat
+Green Goddess: Alpukat, bayam, kiwi, apel, madu
+Bok Choy Zen: Bok choy, nanas, pir, jeruk sitrun
+Asparagus Lean: Asparagus kukus, apel hijau, mentimun, mint
+Romaine Pear: Selada romaine, buah pir, kiwi, air kelapa
+Cabbage Clean: Kubis ungu, blueberry, apel, air jeruk
+Morning Chlorophyll: Cairan klorofil, timun, apel hijau, lemon`},
+{name:'Berry & Sweet Fruit',icon:'🍓',c1:'#ff1744',c2:'#ff80ab',blurb:'Aneka berry dan buah manis penyegar hari.',tip:'Pakai buah beku untuk tekstur lebih dingin dan kental tanpa banyak es batu.',data:`
+Classic Strawberry: Stroberi, pisang, yogurt vanilla, susu
+Triple Berry: Stroberi, blueberry, raspberry, susu almond
+Mango Tango: Mangga, jeruk, yogurt, madu
+Blueberry Bliss: Blueberry, pisang, yogurt, susu
+Watermelon Splash: Semangka, stroberi, daun mint, jeruk nipis
+Peach Perfect: Persik (peach), pisang, yogurt, susu
+Cherry Bomb: Ceri, pisang, susu cokelat almond
+Pomegranate Red: Jus delima, stroberi, raspberry
+Raspberry Rose: Raspberry, pisang, air mawar, yogurt
+Citrus Sunrise: Jeruk, grapefruit, mangga, wortel
+Dragon Glow: Buah naga merah, pisang, yogurt, madu
+Papaya Cream: Pepaya, pisang, jeruk nipis, susu kelapa
+Guava Pink: Jambu biji merah, stroberi, apel, air kelapa
+Plum Sweet: Buah plum, blueberry, pisang, yogurt
+Blackberry Fields: Blackberry, pisang, susu oat, madu
+Cranberry Tart: Cranberry, apel merah, jeruk, madu
+Apple Cinnamon: Apel merah, pisang, kayu manis, susu oat
+Melon Breeze: Melon kuning, semangka, daun mint
+Kiwi Berry: Kiwi, stroberi, pisang, air kelapa
+Grape Splash: Anggur merah, blueberry, yogurt vanilla
+Strawberry Mango Twist: Stroberi, mangga, jeruk, yogurt
+Blueberry Lemonade: Blueberry, air lemon, madu, air kelapa
+Sweet Cherry Lime: Ceri, jeruk nipis, pisang, air
+Raspberry Mango: Raspberry, mangga, susu almond
+Blackberry Mint: Blackberry, daun mint, pisang, yogurt plain`},
+{name:'Tropical & Exotic',icon:'🍍',c1:'#ff9100',c2:'#ffea00',blurb:'Citarasa eksotis dari buah tropis, kelapa, dan kombinasi menyegarkan.',tip:'Buah tropis yang matang sempurna membuat smoothie manis alami tanpa tambahan gula.',data:`
+Piña Colada: Nanas, pisang, santan encer, parutan kelapa
+Passion Fruit: Markisa, mangga, nanas, air kelapa
+Coconut Dream: Daging kelapa muda, air kelapa, pisang, kurma
+Papaya Sunrise: Pepaya, nanas, jeruk, mangga
+Lychee Chill: Leci, stroberi, air kelapa, daun mint
+Jackfruit Cream: Nangka, pisang, susu kelapa
+Soursop Fresh: Sirsak, stroberi, madu, air
+Mango Coconut: Mangga, air kelapa, yogurt kelapa
+Tropical Twist: Nanas, kiwi, mangga, passion fruit
+Banana Palm: Pisang, gula aren cair, santan, almond
+Starfruit Zing: Belimbing, nanas, apel hijau, madu
+Guava Passion: Jambu biji merah, markisa, jeruk
+Rambutan Sweet: Rambutan, stroberi, air kelapa
+Dragon Tropical: Buah naga, nanas, mangga, santan
+Citrus Island: Jeruk, nanas, pisang, yogurt vanilla
+Papaya Lime: Pepaya, air jeruk nipis, madu, air dingin
+Avocado Coco: Alpukat, daging kelapa muda, air kelapa, madu
+Tamarind Twist: Asam jawa, mangga, nanas, madu
+Melon Coconut: Melon hijau, air kelapa, chia seeds
+Spiced Mango: Mangga, pisang, bubuk kunyit dan jahe
+Durian Creamy: Durian (sedikit), pisang, susu kelapa
+Mangosteen Bliss: Manggis, stroberi, apel, air kelapa
+Snake Fruit Sweet: Salak (dihaluskan), pisang, yogurt vanilla
+Starfruit Melon: Belimbing, melon hijau, mint, madu
+Soursop Mango: Sirsak, mangga, air kelapa`},
+{name:'Creamy, Nutty & Protein',icon:'🥜',c1:'#7c4dff',c2:'#40c4ff',blurb:'Kaya protein, lemak sehat, oat, cokelat, dan kacang-kacangan.',tip:'Rendam kacang atau oat 15 menit sebelum di-blend agar lebih creamy dan mudah halus.',data:`
+PB & J: Selai kacang, stroberi, pisang, susu
+Chocolate Banana: Bubuk kakao, pisang, susu almond, kurma
+Almond Butter Oats: Selai almond, gandum (oats), pisang, susu oat
+Nutella Dream: Selai Nutella, pisang, susu, hazelnut
+Vanilla Bean: Ekstrak vanilla, pisang, yogurt Yunani, susu
+Coffee Kick: Kopi espresso dingin, pisang, bubuk kakao, susu
+Oatmeal Cookie: Oats, pisang, kayu manis, kismis, susu almond
+Cashew Cream: Kacang mede (rendam), pisang, kurma, vanilla, susu
+Salted Caramel: Kurma, selai kacang, garam laut, pisang, susu
+Protein Charge: Bubuk protein, pisang, susu almond
+Tahini Honey: Tahini (selai wijen), madu, pisang, susu almond
+Choco Mint: Bubuk kakao, daun mint, pisang, susu almond
+Chia Seed Pudding: Chia seeds (rendam), blueberry, pisang, yogurt
+Pumpkin Spice: Labu kuning kukus, kayu manis, pala, pisang, susu
+Sweet Potato Pie: Ubi jalar panggang/kukus, pisang, susu, kenari
+Macadamia Nut: Kacang makadamia, pisang, vanilla, susu kelapa
+Dark Choco Cherry: Ceri hitam, bubuk kakao hitam, susu oat
+Avocado Mocha: Alpukat, kopi espresso, bubuk kakao, madu, susu
+Hemp Energy: Hemp seeds, pisang, stroberi, susu almond
+Black Sesame: Wijen hitam sangrai, pisang, kurma, susu kedelai
+Pistachio Dream: Kacang pistachio, pisang, bayam (warna), susu almond
+Peanut Butter Mocha: Selai kacang, kopi, bubuk kakao, pisang, susu
+Almond Joy: Almond, bubuk kakao, parutan kelapa, pisang, susu kelapa
+Berry Protein Shake: Protein powder, stroberi, blueberry, air
+Oatmeal Berry Crumble: Oats, stroberi, yogurt vanilla, madu, susu`},
+{name:'Wellness, Veggie & Spice',icon:'🌿',c1:'#00bfa5',c2:'#18ffff',blurb:'Herbal, rempah berkhasiat, dan sayuran padat nutrisi.',tip:'Tambahkan sedikit lada hitam pada resep kunyit agar penyerapannya lebih baik.',data:`
+Golden Milk: Kunyit, jahe, kayu manis, pisang, susu almond
+Ginger Beet: Bit merah, jahe, wortel, apel merah
+Carrot Cake: Wortel, pisang, kayu manis, kenari, susu oat
+Anti-Inflammatory: Nanas, jahe, kunyit, seledri, lemon
+Immune Booster: Jeruk, wortel, jahe, lemon, madu
+Flu Fighter: Kiwi, jeruk, stroberi, bayam, jahe
+Iron Maximum: Bayam, bit merah, blackberry, prem (prune)
+Sleep Well: Pisang, buah ceri (tart cherry), susu almond hangat
+Fiber Rich: Apel, buah pir, oats, flaxseeds, air
+Hydration Hero: Semangka, air kelapa, timun, aloe vera
+Skin Glow: Stroberi, alpukat, mentimun, kolagen bubuk
+Brain Power: Blueberry, kacang kenari, alpukat, susu
+Digestion Aid: Pepaya, nanas, jahe, yogurt kefir
+Workout Recovery: Pisang, air kelapa, bayam, garam laut, protein
+Hangover Cure: Air kelapa, pisang, jahe, madu, jeruk
+Belly Slim: Grapefruit, apel hijau, jahe, chia seeds
+Heart Healthy: Alpukat, bayam, oatmeal, susu kedelai
+Active Women: Buah delima, bit, stroberi, bubuk maca
+Stress Reliever: Pisang, teh chamomile pekat (dingin), madu, almond
+Superfood Ultimate: Acai berry, spirulina, chia seeds, maca, blueberry, air kelapa
+Turmeric Tangerine: Kunyit, jeruk santang, mangga, yogurt kelapa
+Beet & Berry Beauty: Bit merah, stroberi, raspberry, air jeruk
+Carrot Ginger Zest: Wortel, jahe, apel hijau, jeruk nipis
+Cinnamon Beet: Bit, kayu manis, pisang, susu almond
+Tomato Savory: Tomat merah, wortel, seledri, sedikit lada hitam, air`},
+{name:'Dessert & Hybrid',icon:'🍨',c1:'#d500f9',c2:'#ff4081',blurb:'Rasa mirip kue, es krim tradisional, dan paduan unik.',tip:'Sajikan dengan topping remah biskuit atau parutan cokelat agar makin mirip dessert.',data:`
+Strawberry Shortcake: Stroberi, biskuit gandum hancur, yogurt vanilla, susu
+Mango Sticky Rice: Mangga, santan kental, ketan putih matang (sedikit), madu
+Es Teler Smoothie: Alpukat, nangka, kelapa muda, susu kental manis, air
+Lemon Meringue Pie: Kurd lemon/air lemon pekat, yogurt vanilla, pisang, remahan biskuit
+Blueberry Muffin: Blueberry, oats, vanilla, yogurt Yunani, susu
+Klepon Smoothie: Pandan pasir/ekstrak pandan asli, santan, gula aren, parutan kelapa
+Matcha Red Bean: Bubuk matcha, kacang merah manis (matang), susu kedelai
+Key Lime Pie: Air jeruk nipis pekat, yogurt vanilla, alpukat, madu
+Peach Cobbler: Persik, oats, kayu manis, yogurt vanilla, kenari
+Banana Split: Pisang, stroberi, bubuk kakao, vanilla, susu
+Black Forest: Ceri merah, bubuk kakao hitam, yogurt vanilla, susu oat
+Cendol Smoothie: Cendol hancur, santan, gula aren cair, nangka
+Piña Matcha: Nanas, bubuk matcha, santan encer, pisang
+Apple Crisp: Apel panggang, oats, kayu manis, yogurt vanilla
+Mint Choco Chip: Daun mint, alpukat (tekstur), cacao nibs, susu almond
+Caramel Popcorn Smoothie: Kurma, selai kacang, ekstrak vanilla, jagung manis pipil kukus, susu
+Red Velvet Cake: Bit merah (untuk warna), bubuk kakao, yogurt vanila, kurma, susu
+Avocado Espresso Affogato: Alpukat, kopi espresso panas (dituang terakhir), vanilla, susu kental manis
+Coconut Key Lime: Air jeruk nipis, santan, pisang, parutan kulit jeruk nipis (zest)
+Raspberry Cheesecake: Raspberry, cream cheese (1 sdm), yogurt vanilla, biskuit marie
+Tiramisu Cream: Kopi, bubuk kakao, keju mascarpone/cream cheese, kurma, susu
+Kolak Pisang Smoothie: Pisang, ubi jalar kukus, santan, gula aren, kayu manis
+Gingerbread Man: Jahe bubuk, kayu manis, cengkih, molase/gula aren, pisang, susu oat
+Orange Creamsicle: Jeruk beku, yogurt vanilla, es batu, madu
+Choco Peanut Butter Cup: Bubuk kakao, selai kacang banyak, yogurt plain, susu`}
+];
+
+const R=[];
+CATS.forEach((c,ci)=>c.data.trim().split('\n').forEach(l=>{
+  const k=l.indexOf(':');
+  R.push({id:R.length,ci,name:l.slice(0,k).trim(),ings:l.slice(k+1).split(', ').map(s=>s.trim()).filter(Boolean),n:0});
+}));
+R.forEach((r,i)=>r.n=i);
+
+/* emoji bahan */
+const EM=[[/daun mint|mint|basil|kemangi|peterseli|pandan/,'🌿'],[/es batu/,'🧊'],[/stroberi|raspberry/,'🍓'],[/blueberry|blackberry|mulberry/,'🫐'],[/cranberry|ceri|cherry/,'🍒'],
+[/brokoli/,'🥦'],[/bayam|kale|kangkung|bok choy|selada|chard|kubis|asparagus|zucchini|wheatgrass|klorofil|spirulina|lidah buaya|aloe/,'🥬'],[/timun|mentimun/,'🥒'],
+[/apel hijau/,'🍏'],[/apel/,'🍎'],[/lemon|jeruk nipis|lime|sitrun/,'🍋'],[/jeruk|grapefruit|santang/,'🍊'],[/mangga/,'🥭'],[/nanas/,'🍍'],[/pisang/,'🍌'],[/alpukat/,'🥑'],[/kiwi/,'🥝'],
+[/kelapa|santan/,'🥥'],[/melon/,'🍈'],[/semangka/,'🍉'],[/anggur/,'🍇'],[/persik|peach|aprikot/,'🍑'],[/\bpir\b/,'🍐'],[/susu|yogurt|kefir|cream|keju/,'🥛'],[/madu|sirup|maple|molase|gula aren/,'🍯'],
+[/kopi|espresso/,'☕'],[/teh|matcha|chamomile|chai/,'🍵'],[/kakao|cokelat|nutella|choco|cacao/,'🍫'],[/jagung/,'🌽'],[/wortel/,'🥕'],[/tomat/,'🍅'],[/labu/,'🎃'],[/ubi/,'🍠'],[/bit\b/,'🟣'],
+[/kacang|almond|kenari|mede|hazelnut|pistachio|makadamia|selai|wijen|tahini|hemp|chia|flax|biji|kismis/,'🥜'],[/oats|oatmeal|gandum|granola|biskuit|ketan/,'🌾'],
+[/jahe|kunyit|kayu manis|cengkih|kapulaga|pala|lada|cabai|garam/,'✨'],[/vanilla|mawar/,'🌼'],[/protein|kolagen|maca|acai/,'💪'],
+[/pepaya|jambu|markisa|passion|sirsak|belimbing|leci|rambutan|manggis|salak|nangka|durian|buah naga|delima|plum|prem|kurma|asam jawa|cendol|fig/,'🌴'],[/air|jus/,'💧']];
+const emo=s=>{s=s.toLowerCase();for(const [re,e] of EM)if(re.test(s))return e;return '🥤'};
+
+let uid=0;
+function cup(c1,c2,em,hue){
+  const id='g'+(uid++);
+  return `<svg viewBox="0 0 200 330" class="cup" aria-hidden="true" style="filter:hue-rotate(${hue||0}deg)">
+<defs><linearGradient id="${id}l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient>
+<linearGradient id="${id}g" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".3" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity=".3"/></linearGradient>
+<clipPath id="${id}c"><path d="M34 70H166L150 304Q149 316 137 316H63Q51 316 50 304Z"/></clipPath></defs>
+<rect x="104" y="4" width="13" height="130" rx="6" fill="#ff4081" transform="rotate(12 110 66)"/>
+<g clip-path="url(#${id}c)"><rect x="20" y="60" width="160" height="270" fill="#fff" fill-opacity=".3"/>
+<path d="M20 112Q50 96 80 112T140 112T200 112V330H20Z" fill="url(#${id}l)"/>
+<circle cx="70" cy="200" r="7" fill="#fff" fill-opacity=".5"/><circle cx="128" cy="240" r="10" fill="#fff" fill-opacity=".4"/><circle cx="92" cy="270" r="5" fill="#fff" fill-opacity=".5"/><circle cx="135" cy="160" r="5" fill="#fff" fill-opacity=".45"/></g>
+<path d="M34 70H166L150 304Q149 316 137 316H63Q51 316 50 304Z" fill="url(#${id}g)" stroke="#fff" stroke-opacity=".9" stroke-width="4"/>
+<rect x="26" y="58" width="148" height="16" rx="8" fill="#fff" fill-opacity=".9"/>
+<text x="100" y="50" text-anchor="middle" font-size="44">${em}</text></svg>`;
+}
+
+/* langkah pembuatan */
+function steps(r){
+  const liq=r.ings.filter(i=>/susu|air|jus|santan|teh|kopi|yogurt|kefir|sirup/i.test(i));
+  const rest=r.ings.filter(i=>!liq.includes(i));
+  const pre=r.ings.filter(i=>/kukus|panggang|matang|rendam|sangrai|dihaluskan/i.test(i));
+  const s=['Cuci bersih semua bahan, lalu kupas dan potong buah/sayur menjadi ukuran kecil agar mudah di-blend.'];
+  if(pre.length)s.push('Siapkan dulu bahan yang perlu perlakuan khusus ('+pre.map(x=>x.toLowerCase()).join(', ')+') dan pastikan sudah dingin sebelum dipakai.');
+  s.push(liq.length?'Tuang bahan cair ke dalam blender lebih dulu: '+liq.join(', ')+'.':'Tuang ±150 ml air dingin ke dalam blender sebagai dasar cairan.');
+  if(rest.length)s.push('Masukkan bahan lainnya: '+rest.join(', ')+'.');
+  s.push('Tambahkan es batu secukupnya (opsional) agar lebih segar.');
+  s.push('Blend 45–60 detik mulai dari kecepatan rendah ke tinggi sampai benar-benar halus. Jika terlalu kental, tambahkan sedikit cairan.');
+  s.push('Cicipi, sesuaikan rasa manisnya, tuang ke gelas, dan nikmati selagi dingin! 🥤');
+  return s;
+}
+
+/* ================= BERANDA 3D ================= */
+const sway=document.getElementById('sway');
+const heroFruits=[['🍓',-190,-90,60,.3,4.2],['🍌',190,-70,80,.45,5],['🍍',-170,90,100,.6,4.6],['🥭',180,100,40,.75,3.8],['🥝',-40,-170,-30,.9,4.4],['🍊',60,160,90,1.05,5.2],['🫐',-250,0,-40,1.2,4],['🥑',250,10,-30,1.3,4.8]];
+sway.innerHTML=`<div class="hero-cup">${cup('#ff4fa3','#ffd93d','🍓')}</div>`+
+ heroFruits.map(f=>`<div class="fx" style="--x:${f[1]}px;--y:${f[2]}px;--z:${f[3]}px;--d:${f[4]}s;--t:${f[5]}s">${f[0]}</div>`).join('')+
+ [[-120,-10,120,1.4,'8s'],[130,-150,50,1.5,'11s'],[110,40,160,1.6,'9s']].map(c=>`<div class="ice" style="--x:${c[0]}px;--y:${c[1]}px;--z:${c[2]}px"><div class="cube" style="--d:${c[3]}s;--t:${c[4]}"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>`).join('');
+const stage=document.getElementById('stage'),scene=document.getElementById('scene');
+stage.addEventListener('pointermove',e=>{const b=stage.getBoundingClientRect();const x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;scene.style.setProperty('--ry',(x*40)+'deg');scene.style.setProperty('--rx',(-y*26)+'deg')});
+stage.addEventListener('pointerleave',()=>{scene.style.setProperty('--ry','0deg');scene.style.setProperty('--rx','0deg')});
+sway.addEventListener('click',e=>{const f=e.target.closest('.fx');if(!f)return;f.classList.remove('boing');void f.offsetWidth;f.classList.add('boing')});
+document.getElementById('nextBtn').onclick=()=>location.hash='#explore';
+document.getElementById('toHome').onclick=()=>location.hash='#home';
+
+/* ================= EXPLORE ================= */
+const $=id=>document.getElementById(id);
+let curCat=-1,query='';
+const chips=$('chips');
+function drawChips(){
+  chips.innerHTML=`<button class="chip ${curCat<0?'on':''}" data-c="-1" style="--c1:#ff4fa3;--c2:#9b5cff">🍹 Semua (${R.length})</button>`+
+   CATS.map((c,i)=>`<button class="chip ${curCat===i?'on':''}" data-c="${i}" style="--c1:${c.c1};--c2:${c.c2}">${c.icon} ${c.name}</button>`).join('');
+}
+chips.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;curCat=+b.dataset.c;drawChips();drawGrid()};
+function drawGrid(){
+  const q=query.trim().toLowerCase();
+  const list=R.filter(r=>(curCat<0||r.ci===curCat)&&(!q||r.name.toLowerCase().includes(q)||r.ings.join(' ').toLowerCase().includes(q)||CATS[r.ci].name.toLowerCase().includes(q)));
+  $('blurb').textContent=curCat>=0?CATS[curCat].icon+' '+CATS[curCat].blurb:'';
+  $('count').textContent=list.length+' menu ditemukan';
+  $('grid').innerHTML=list.length?list.map((r,i)=>{const c=CATS[r.ci];
+    return `<button class="card" style="--c1:${c.c1};--c2:${c.c2};--i:${i}" data-id="${r.id}" aria-label="Buka resep ${r.name}">
+      ${cup(c.c1,c.c2,emo(r.ings[0]),0).replace('class="cup"','class="cup" ').replace(/filter:hue-rotate\(0deg\)/,'filter:none')}
+      <h3>${r.name}</h3><p>${r.ings.slice(0,3).map(emo).join(' ')} ${r.ings.slice(0,3).join(', ')}${r.ings.length>3?'…':''}</p><span class="tag">${c.icon} ${c.name}</span></button>`}).join('')
+    :`<div class="empty" style="grid-column:1/-1"><b>🫣</b>Belum ada smoothie dengan kata itu.<br>Coba kata lain seperti “pisang”, “jahe”, atau “mangga”.</div>`;
+}
+$('grid').onclick=e=>{const c=e.target.closest('.card');if(c)location.hash='#r/'+c.dataset.id};
+$('q').oninput=e=>{query=e.target.value;drawGrid()};
+$('clearQ').onclick=()=>{$('q').value='';query='';drawGrid();$('q').focus()};
+$('randomBtn').onclick=()=>location.hash='#r/'+Math.floor(Math.random()*R.length);
+
+/* ================= DETAIL ================= */
+const det=$('detail');
+function drawDetail(id){
+  const r=R[id];if(!r){location.hash='#explore';return}
+  const c=CATS[r.ci];const same=R.filter(x=>x.ci===r.ci);const idx=same.indexOf(r);
+  const prev=same[(idx+same.length-1)%same.length],next=same[(idx+1)%same.length];
+  const st=steps(r);
+  det.style.setProperty('--c1',c.c1);det.style.setProperty('--c2',c.c2);
+  det.innerHTML=`
+  <div class="topbar"><button class="pill" id="back">← Kembali</button><button class="brand" id="home2">SMOOSH</button></div>
+  <div class="dwrap">
+    <div class="dcup" id="dcup">${cup(c.c1,c.c2,emo(r.ings[0]),0).replace('filter:hue-rotate(0deg)','')}<span class="cat">${c.icon} ${c.name}</span></div>
+    <div>
+      <div class="panel"><h1>${r.name}</h1><p class="tip">💡 ${c.tip}</p>
+        <div class="actions"><button class="pill" id="prev">◀ ${prev.name}</button><button class="pill" id="nxt">${next.name} ▶</button><button class="pill" id="rnd">🎲 Acak</button></div></div>
+      <div class="panel"><h2>🧺 Bahan-bahan</h2><ul class="ings" id="ings">${r.ings.map(i=>`<li tabindex="0"><span class="e">${emo(i)}</span>${i}</li>`).join('')}</ul></div>
+      <div class="panel"><h2>👩‍🍳 Langkah pembuatan</h2><div class="prog"><i id="prog"></i></div><ol class="steps" id="steps">${st.map(s=>`<li tabindex="0">${s}</li>`).join('')}</ol></div>
+    </div>
+  </div>`;
+  const toggle=e=>{const li=e.target.closest('li');if(!li)return;li.classList.toggle('done');upd()};
+  const upd=()=>{const a=det.querySelectorAll('#steps li'),d=det.querySelectorAll('#steps li.done');$('prog').style.width=(d.length/a.length*100)+'%'};
+  ['ings','steps'].forEach(k=>{const el=$(k);el.onclick=toggle;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(e)}}});
+  $('back').onclick=()=>location.hash='#explore';$('home2').onclick=()=>location.hash='#home';
+  $('prev').onclick=()=>location.hash='#r/'+prev.id;$('nxt').onclick=()=>location.hash='#r/'+next.id;$('rnd').onclick=()=>location.hash='#r/'+Math.floor(Math.random()*R.length);
+  const dc=$('dcup');dc.onpointermove=e=>{const b=dc.getBoundingClientRect();dc.style.setProperty('--ry',((e.clientX-b.left)/b.width-.5)*40+'deg');dc.style.setProperty('--rx',(-((e.clientY-b.top)/b.height-.5))*30+'deg')};
+  dc.onpointerleave=()=>{dc.style.setProperty('--ry','0deg');dc.style.setProperty('--rx','0deg')};
+}
+
+/* ================= ROUTER ================= */
+function show(id){['home','explore','detail'].forEach(v=>{const el=$(v);el.classList.toggle('hidden',v!==id);if(v===id){el.style.animation='none';void el.offsetWidth;el.style.animation=''}});scrollTo(0,0)}
+function route(){
+  const h=location.hash||'#home';
+  if(h.startsWith('#r/')){drawDetail(+h.slice(3));show('detail')}
+  else if(h==='#explore')show('explore');
+  else show('home');
+}
+addEventListener('hashchange',route);
+drawChips();drawGrid();route();
+</script>
+</body>
+</html>
